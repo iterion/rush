@@ -286,9 +286,10 @@ class Rush::Connection::Local
 	def kill_process(pid, options={})
 		# time to wait before terminating the process, in seconds
 		wait = options[:wait] || 3
+    signal = options[:signal] || 'TERM'
 
 		if wait > 0
-			::Process.kill('TERM', pid)
+			::Process.kill(signal, pid)
 
 			# keep trying until it's dead (technique borrowed from god)
 			begin
@@ -296,14 +297,14 @@ class Rush::Connection::Local
 					loop do
 						return if !process_alive(pid)
 						sleep 0.5
-						::Process.kill('TERM', pid) rescue nil
+						::Process.kill(signal, pid) rescue nil
 					end
 				end
 			rescue Timeout::Error
 			end
 		end
 
-		::Process.kill('KILL', pid) rescue nil
+		::Process.kill(signal, pid) rescue nil
 
 	rescue Errno::ESRCH
 		# if it's dead, great - do nothing
