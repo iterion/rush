@@ -234,7 +234,7 @@ class Rush::Connection::Local
 	# Parse a single line of the ps command and return the values in a hash
 	# suitable for use in the Rush::Process#new.
 	def parse_ps(line)
-		m = line.split(" ", 6)
+		m = line.split(/\s+/, 6)
 		params = {}
 		params[:pid] = m[0]
 		params[:uid] = m[1]
